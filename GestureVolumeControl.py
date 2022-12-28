@@ -6,6 +6,8 @@ import math
 import numpy as np
 from subprocess import call
 
+pTime = 0
+cTime = 0
 cap = cv2.VideoCapture(0)
 
 detector = htm.handDetector()
@@ -47,8 +49,6 @@ while True:
         cv2.putText(img, f'Volume: {int(volume)}%' , (center_x-150,center_y-125), cv2.FONT_HERSHEY_PLAIN, 3, (0,0,0), 3)
 
     #To calculate and show the FPS
-    pTime = 0
-    cTime = 0
     cTime = time.time()
     fps = 1/(cTime - pTime) #cTime = 'Current Time' and pTime = 'Previous Time'
     pTime = cTime
