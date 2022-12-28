@@ -15,7 +15,7 @@ while True:
     img = detector.findHands(img)
     landmarksList = detector.findPositions(img, draw=False)
     if len(landmarksList) != 0:
-        #for this project, according to the finger's id numbers provided by the mediapipe documentation, we'll only need the values from id4(thumb_tip) and id8(index_finger_tip)
+        #according to the finger's id numbers provided by the mediapipe documentation, we'll only need the values from id4(thumb_tip) and id8(index_finger_tip)
         #print(landmarksList)
         thumb_x, thumb_y = landmarksList[4][1], landmarksList[4][2]
         index_x, index_y = landmarksList[8][1], landmarksList[8][2]
@@ -33,11 +33,11 @@ while True:
         #print(lenght)
 
         # printing the length, it was noticed that, for my case, the max length was around 300 and the minimal around 50
-        # so now it is needed to convert the range 50 - 300 to 0 - 100
+        # so now it is needed to convert the range 50 - 300 to 0 - 100 using this inperpolate function from numpy
         volume = np.interp(lenght,[50,300],[0,100]) 
         #print(volume)
 
-        #to change the volume in linux Ubuntu 22.04
+        #to effectivelly change the volume in linux Ubuntu 22.04
         call(["amixer", "-D", "pulse", "sset", "Master", str(volume) + "%"])
 
         #to draw the volume bar 
@@ -46,16 +46,15 @@ while True:
         cv2.rectangle(img, (center_x-200, center_y-100), (int(volume_bar), center_y-50), (255,255,0), cv2.FILLED)
         cv2.putText(img, f'Volume: {int(volume)}%' , (center_x-150,center_y-125), cv2.FONT_HERSHEY_PLAIN, 3, (0,0,0), 3)
 
-
+    #To calculate and show the FPS
     pTime = 0
     cTime = 0
-    #To calculate the FPS
     cTime = time.time()
     fps = 1/(cTime - pTime) #cTime = 'Current Time' and pTime = 'Previous Time'
     pTime = cTime
-
     cv2.putText(img, f'FPS: {int(fps)}' , (10,70), cv2.FONT_HERSHEY_PLAIN, 3, (0,255,255), 3) 
 
+    #To display the image
     cv2.imshow("Image", img)
     if cv2.waitKey(1) & 0xFF == ord('q'):
             break
